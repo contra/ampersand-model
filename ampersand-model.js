@@ -78,8 +78,8 @@ var Model = State.extend({
         if (options.parse === void 0) options.parse = true;
         var model = this;
         var success = options.success;
-        options.success = function (resp) {
-            if (!model.set(model.parse(resp, options), options)) return false;
+        options.success = function (body, type, resp) {
+            if (!model.set(model.parse(body, options), options)) return false;
             if (success) success(model, resp, options);
             model.trigger('sync', model, resp, options);
         };
@@ -99,7 +99,7 @@ var Model = State.extend({
             model.trigger('destroy', model, model.collection, options);
         };
 
-        options.success = function (resp) {
+        options.success = function (body, type, resp) {
             if (options.wait || model.isNew()) destroy();
             if (success) success(model, resp, options);
             if (!model.isNew()) model.trigger('sync', model, resp, options);
